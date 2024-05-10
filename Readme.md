@@ -25,7 +25,7 @@ github:
 	branch_docker_app_test_1
 	branch_docker_app_run_1
 	branch_docker_ml_test_1
-	branch_ml_cicd_1
+	branch_docker_ml_cicd_1
 
 	branch_model_train_1
 	branch_data_pipeline_1
