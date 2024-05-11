@@ -19,7 +19,26 @@ github:
    - если по качеству данных успех - перетринировываем модель на обновлённых данных 
 
 
+##Сборка docker-образов
 
+```console
+foo@bar:~$ docker build --squash -t ml_cicd -f Dockerfile.ml_cicd .
+foo@bar:~$ docker build --squash --no-cache -t ml_cicd -f Dockerfile.ml_cicd .
+foo@bar:~$ docker run -it 9f7974dd0a27 /bin/bash
+foo@bar:~$ docker run -it --gpus device=0 9f7974dd0a27 /bin/bash
+
+
+docker rmi $(docker images --filter "dangling=true" -q --no-trunc)
+
+docker inspect --format='{{.Id}} {{.Parent}}' $(docker images --filter since=e4c58958181a --quiet)
+
+docker exec -d ml_cicd /bin/bash
+
+docker rmi $(docker images | grep 'ubuntu')
+
+docker ps -q --filter ancestor=ml_cicd
+
+```
 
 
 	branch_docker_app_test_1

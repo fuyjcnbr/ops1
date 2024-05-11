@@ -1,14 +1,23 @@
 FROM ubuntu:22.04
 
+RUN mkdir /data
+
+RUN mkdir /conf
+COPY requirements_ml_cicd.txt /conf/requirements_ml_cicd.txt
+COPY git_creds.txt /conf/git_creds.txt
+
+RUN mkdir /code
+COPY model.py /code/model.py
+
+
 RUN apt-get update
 RUN apt-get -y install apt-utils
-RUN mkdir /data
-RUN mkdir /conf
 
-RUN apt-get -y install python3 python3-pip
+RUN apt-get -y install python3 python3-pip git
 
-COPY requirements.txt /conf/requirements.txt
-
-RUN pip install -r /conf/requirements.txt
+RUN pip3 install -r /conf/requirements_ml_cicd.txt
 
 RUN echo root:root | chpasswd
+
+RUN cat /conf/git_creds.txt >> /root/.bashrc
+
