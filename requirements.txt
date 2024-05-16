@@ -1,5 +1,3 @@
-fastapi
-uvicorn
-transformers[torch]
-numpy
-httpx
+tensorflow==2.14.0
+transformers
+streamlit

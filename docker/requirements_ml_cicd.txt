@@ -9,5 +9,6 @@ matplotlib
 numpy
 pandas
 scikit-learn
-torch==2.1.2
-pykan
+#torch==2.1.2
+#pykan
+streamlit
