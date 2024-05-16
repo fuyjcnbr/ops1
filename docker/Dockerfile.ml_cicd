@@ -1,0 +1,48 @@
+FROM ubuntu:22.04
+
+RUN mkdir /data
+
+RUN mkdir /conf
+COPY requirements_ml_cicd.txt /conf/requirements_ml_cicd.txt
+COPY git_creds.txt /conf/git_creds.txt
+COPY cuda_12.1.1_530.30.02_linux.run /conf/cuda_12.1.1_530.30.02_linux.run
+COPY *.whl /conf/
+
+RUN mkdir /code
+COPY model.py /code/model.py
+
+RUN apt-get update
+#RUN apt-get -y install apt-utils gcc wget
+RUN apt-get -y install apt-utils gcc wget libxml2 iputils-ping
+
+#RUN apt-get -y install libxml2
+RUN sh /conf/cuda_12.1.1_530.30.02_linux.run --toolkit --silent --override
+
+
+#RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+#RUN dpkg -i cuda-keyring_1.1-1_all.deb
+#RUN apt-get update
+
+
+#RUN apt-get -y install apt-utils gcc wget
+#RUN apt-get -y install ubuntu-drivers-common nvidia-driver-550
+
+#RUN wget https://developer.download.nvidia.com/compute/cuda/repos/ubuntu2204/x86_64/cuda-keyring_1.1-1_all.deb
+#RUN dpkg -i cuda-keyring_1.1-1_all.deb
+#RUN apt-get update
+
+##RUN apt-get -y install cuda
+
+
+RUN apt-get -y install python3 python3-pip git
+
+RUN pip3 install -r /conf/requirements_ml_cicd.txt
+# -U
+
+RUN echo root:root | chpasswd
+
+RUN cat /conf/git_creds.txt >> /root/.bashrc
+RUN echo "" >> /root/.bashrc
+
+RUN echo "export PATH=/usr/local/cuda/bin${PATH:+:${PATH}}" >> /root/.bashrc
+RUN echo "export LD_LIBRARY_PATH=/usr/local/cuda-12.2/lib64${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}" >> /root/.bashrc
