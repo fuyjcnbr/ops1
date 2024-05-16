@@ -25,7 +25,28 @@ github:
 foo@bar:~$ docker build --squash -t ml_cicd -f Dockerfile.ml_cicd .
 foo@bar:~$ docker build --squash --no-cache -t ml_cicd -f Dockerfile.ml_cicd .
 foo@bar:~$ docker run -it 9f7974dd0a27 /bin/bash
-foo@bar:~$ docker run -it --gpus device=0 9f7974dd0a27 /bin/bash
+foo@bar:~$ docker run -it --gpus device=0 a093fb3a1e28 /bin/bash
+
+
+docker container cp fashion-mnist_train.csv fa12f5662873:/data
+
+docker container cp fashion-mnist_test.csv fa12f5662873:/data
+
+docker container cp model.py fa12f5662873:/code
+
+
+docker container cp fa12f5662873:/data/out_2024_05_14.csv .
+
+
+
+
+docker run -it --gpus device=0  tensorflow/tensorflow /bin/bash
+
+
+docker run -it --rm --runtime=nvidia tensorflow/tensorflow:latest-gpu python
+
+
+docker rmi -f $(docker images -q)
 
 
 docker rmi $(docker images --filter "dangling=true" -q --no-trunc)

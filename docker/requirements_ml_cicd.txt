@@ -1,3 +1,13 @@
+
+--find-links /conf
+
 flake8
 pytest
 dvc
+tensorflow[and-cuda]==2.14.0
+matplotlib
+numpy
+pandas
+scikit-learn
+torch==2.1.2
+pykan
