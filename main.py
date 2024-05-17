@@ -29,12 +29,14 @@ def load_image():
         return None
 
 
-def preprocess_image(img):
-    img = img.resize((IMAGE_W, IMAGE_H))
-    x = image.img_to_array(img)
-    x = np.expand_dims(x, axis=0)
-    x = preprocess_input(x)
-    return x
+# def preprocess_image(img):
+#     img = img.resize((IMAGE_W, IMAGE_H))
+#     x = image.img_to_array(img)
+#     x = x.reshape(28, 28)
+#     x = x / 255
+#     # x = np.expand_dims(x, axis=0)
+#     # x = preprocess_input(x)
+#     return x
 
 
 if __name__ == "__main__":
@@ -45,24 +47,27 @@ if __name__ == "__main__":
 
         tm = TrainModelDeep("", "", "")
         tm.load_model("model/model.keras")
-        model = tm.model
-        return model
+        # model = tm.probability_model
+        return tm
 
 
-    def print_predictions(preds):
-        print(f"preds={preds}")
-        st.write(str(preds))
+    # def print_predictions(preds):
+    #     print(f"preds={preds}")
+    #     st.write(str(preds))
         # classes = decode_predictions(preds, top=3)[0]
         # for cl in classes:
         #     st.write(cl[1], cl[2])
 
-    model = load_model()
+    tm = load_model()
     st.title(TITLE_TEXT)
     img = load_image()
     result = st.button(BUTTON_TEXT)
     if result:
-        x = preprocess_image(img)
-        preds = model.predict(x)
+        code, name = tm.predict_from_picture(img)
+        print(f"code={code}, name={name}")
+        # x = preprocess_image(img)
+        # preds = model.predict(x)
         # pred = tm.predict1D(img)
         st.write(RESULTS_TEXT)
-        print_predictions(preds)
+        st.write(name)
+        # print_predictions(preds)
