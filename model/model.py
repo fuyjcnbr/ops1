@@ -133,14 +133,15 @@ class TrainModelDeep(TrainModel):
         predictions = self.probability_model.predict(np.array([x]))
         code = np.argmax(predictions[0])
         res = CLASS_NAMES[code]
-        return res
+        return code, res
 
     def generate_pictures(self):
         train_images, test_images, train_labels, test_labels = self.prepare_train_datasets()
 
-        plt.figure(figsize=(10, 10))
-        plt.imshow(train_images[0], cmap=plt.cm.binary)
-        plt.savefig(f"fig_{test_labels[0]}.png")
+        for i in range(10):
+            plt.figure(figsize=(10, 10))
+            plt.imshow(train_images[i], cmap=plt.cm.binary)
+            plt.savefig(f"fig_{test_labels[i]}.png")
 
 
 if __name__ == "__main__":
@@ -150,3 +151,6 @@ if __name__ == "__main__":
         out_csv_path=f"/data/out_{datetime.now().strftime('%Y_%m_%d')}.csv",
     )
     x.main()
+
+    x.load_model("model.keras")
+    x.generate_pictures()

@@ -1,6 +1,6 @@
 import numpy as np
 
-from main import IMAGE_W, IMAGE_H, preprocess_image
+#from main import IMAGE_W, IMAGE_H , preprocess_image
 
 
 def test_model():
@@ -10,9 +10,9 @@ def test_model():
 
 
         tm = TrainModelDeep("", "", "")
-        tm.load_model("model.keras")
+        tm.load_model("model/model.keras")
 
-        img = load_img("fig_0.png", color_mode="grayscale", target_size=(28, 28))
+        img = load_img("tests/integrated/fig_8.png", color_mode="grayscale", target_size=(28, 28))
         code, name = tm.predict_from_picture(img)
         print(f"code={code}, name={name}")
         # # image = load_img("tests/integrated/fig_0.png", color_mode="rgb", target_size=(IMAGE_W, IMAGE_H))
@@ -27,4 +27,4 @@ def test_model():
         # preds = x.probability_model.predict(np.array([x]))
         # # preds = model.predict(x)
         # print(preds)
-        assert code == 0
+        assert code == 8
