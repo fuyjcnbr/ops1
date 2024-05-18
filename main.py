@@ -20,11 +20,19 @@ if __name__ == "__main__":
 
 
 def load_image():
+    from keras.utils import load_img
+
     uploaded_file = st.file_uploader(label=UPLOADER_LABEL)
     if uploaded_file is not None:
         image_data = uploaded_file.getvalue()
         st.image(image_data)
-        return Image.open(io.BytesIO(image_data))
+
+        gray = Image.open(uploaded_file).convert("L")
+
+        ar = np.asarray(gray)
+        print(f"load_image ar.shape={ar.shape}")
+
+        return gray #Image.open(io.BytesIO(image_data))
     else:
         return None
 
@@ -36,6 +44,18 @@ def load_image():
 #     x = x / 255
 #     # x = np.expand_dims(x, axis=0)
 #     # x = preprocess_input(x)
+#     return x
+
+# def preprocess_image(img):
+#     print(f"preprocess_image img.shape={img.shape}")
+#     img = img.resize((IMAGE_W, IMAGE_H))
+#     print(f"preprocess_image img.shape2={img.shape}")
+#     x = image.img_to_array(img)
+#     print(f"preprocess_image x.shape={x.shape}")
+#     x = np.expand_dims(x, axis=0)
+#     print(f"preprocess_image x2.shape={x.shape}")
+#     x = preprocess_input(x)
+#     print(f"preprocess_image x3.shape={x.shape}")
 #     return x
 
 
@@ -63,7 +83,9 @@ if __name__ == "__main__":
     img = load_image()
     result = st.button(BUTTON_TEXT)
     if result:
+        # x = preprocess_image(img)
         code, name = tm.predict_from_picture(img)
+        # code, name = tm.predict_from_picture(x)
         print(f"code={code}, name={name}")
         # x = preprocess_image(img)
         # preds = model.predict(x)
