@@ -8,7 +8,7 @@ import matplotlib.pyplot as plt
 
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-from keras.utils import load_img
+# from keras.utils import load_img
 from tensorflow.keras.preprocessing import image
 # import torch
 #
