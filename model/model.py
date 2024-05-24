@@ -152,5 +152,5 @@ if __name__ == "__main__":
     )
     x.main()
 
-    x.load_model("model.keras")
-    x.generate_pictures()
+    # x.load_model("model.keras")
+    # x.generate_pictures()

@@ -1,4 +1,4 @@
-cd /repo
+#cd /repo
 git clone https://${GITHUB_USER}:${GITHUB_TOKEN}@github.com/${GITHUB_REPOSITORY}
 cd ops1
 mkdir data
@@ -6,17 +6,21 @@ cd data
 dvc get-url /data/fashion-mnist_train.csv
 #dvc get-url ssh://user@example.com/path/to/data/fashion-mnist_train.csv
 cd ..
-dvc init
+#dvc init
 dvc add data
 
-# run model
+cd model
+python3 model.py
 
-dvc add model.keras
+cd ..
+dvc add model/model.keras
 
 git branch ml-cicd-$(date +%F)
 #git add data.dvc model.h5.dvc metrics.csv .gitignore
+git checkout ml-cicd-$(date +%F)
 
-git add data.dvc model.keras.dvc .gitignore
+
+git add data.dvc model.keras.dvc model/model.keras .gitignore
 
 
 git config --global user.name $GITHUB_USER
@@ -25,4 +29,5 @@ git config --global user.name $GITHUB_USER
 git -c user.name='ci_cd' -c user.email='dummy@dummy.dummy' commit -m "ml-cicd robot"
 
 git status
-git push origin/ml-cicd-$(date +%F)
+#git push origin/ml-cicd-$(date +%F)
+git push --set-upstream origin ml-cicd-$(date +%F)
