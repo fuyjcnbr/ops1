@@ -25,21 +25,24 @@ github:
 foo@bar:~$ docker build --squash -t ml_cicd -f Dockerfile.ml_cicd .
 foo@bar:~$ docker build --squash --no-cache -t ml_cicd -f Dockerfile.ml_cicd .
 foo@bar:~$ docker run -it 9f7974dd0a27 /bin/bash
-foo@bar:~$ docker run -it --gpus device=0 a093fb3a1e28 /bin/bash
+foo@bar:~$ docker run -it --gpus device=0 1809b78fa386 /bin/bash
 
 
-docker container cp fashion-mnist_train.csv b6c39ed471ca:/data
+docker container cp fashion-mnist_train.csv d5ef3673e497:/data
 
-docker container cp fashion-mnist_test.csv b6c39ed471ca:/data
+docker container cp fashion-mnist_test.csv d5ef3673e497:/data
 
-docker container cp model.py b6c39ed471ca:/code
-
-docker container cp main.py b6c39ed471ca:/code
+docker container cp ml_cicd.sh d5ef3673e497:/code
 
 
-docker container cp b6c39ed471ca:/code/fig_0.png .
+docker container cp model.py d5ef3673e497:/code
 
-docker container cp b6c39ed471ca:/data/out_2024_05_14.csv .
+docker container cp main.py d5ef3673e497:/code
+
+
+docker container cp d5ef3673e497:/code/fig_0.png .
+
+docker container cp d5ef3673e497:/data/out_2024_05_14.csv .
 
 
 

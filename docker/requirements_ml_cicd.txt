@@ -4,6 +4,7 @@
 flake8
 pytest
 dvc
+dvc-ssh
 tensorflow[and-cuda]==2.14.0
 matplotlib
 numpy
