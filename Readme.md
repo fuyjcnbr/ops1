@@ -28,21 +28,21 @@ foo@bar:~$ docker run -it 9f7974dd0a27 /bin/bash
 foo@bar:~$ docker run -it --gpus device=0 1809b78fa386 /bin/bash
 
 
-docker container cp fashion-mnist_train.csv d5ef3673e497:/data
+docker container cp fashion-mnist_train.csv 21c0022266b6:/data
 
-docker container cp fashion-mnist_test.csv d5ef3673e497:/data
+docker container cp fashion-mnist_test.csv 21c0022266b6:/data
 
-docker container cp ml_cicd.sh d5ef3673e497:/code
-
-
-docker container cp model.py d5ef3673e497:/code
-
-docker container cp main.py d5ef3673e497:/code
+docker container cp ml_cicd.sh 21c0022266b6:/code
 
 
-docker container cp d5ef3673e497:/code/fig_0.png .
+docker container cp model.py 21c0022266b6:/code
 
-docker container cp d5ef3673e497:/data/out_2024_05_14.csv .
+docker container cp main.py 21c0022266b6:/code
+
+
+docker container cp 21c0022266b6:/code/fig_0.png .
+
+docker container cp 21c0022266b6:/data/out_2024_05_14.csv .
 
 
 

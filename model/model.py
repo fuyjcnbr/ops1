@@ -70,7 +70,8 @@ class TrainModelDeep(TrainModel):
     def prepare_train_datasets(self):
         df = pd.read_csv(self.train_csv_path)
         Y = np.array(df.iloc[:, 0])
-        X = np.array(tf.reshape(df.iloc[:, 1:], [-1, 28, 28]))
+        # X = np.array(tf.reshape(df.iloc[:, 1:], [-1, 28, 28]))
+        X = np.array(tf.reshape(df.iloc[:, 1:], [-1, 28, 28, 1]))
 
         train_images, test_images, train_labels, test_labels = train_test_split(
             X, Y, test_size=0.1, stratify=Y, random_state=127
@@ -81,21 +82,90 @@ class TrainModelDeep(TrainModel):
 
         return train_images, test_images, train_labels, test_labels
 
+    @staticmethod
+    def kernel_init_sharp(shape, dtype=None, partition_info=None):
+        kernel = np.zeros(shape)
+        kernel[:, :, 0, 0] = np.array(
+            [[0, -1, 0],
+             [-1, 5, -1],
+             [0, -1, 0],
+             ]
+        )
+        return kernel
+
+    @staticmethod
+    def kernel_init_edge(shape, dtype=None, partition_info=None):
+        kernel = np.zeros(shape)
+        kernel[:, :, 0, 0] = np.array(
+            [[-1, -1, -1],
+             [-1, 8, -1],
+             [-1, -1, -1],
+             ]
+        )
+        return kernel
+
+    # @staticmethod
+    # def kernel_init2(shape, dtype=None, partition_info=None):
+    #     kernel = np.zeros(shape)
+    #     kernel[:, :, 0, 0] = np.array([[0, 1], [0, 1]])
+    #     return kernel
+
     def create_model(self):
         self.model = tf.keras.Sequential([
             # tf.keras.layers.Resizing(height=10, width=10, interpolation='bilinear'),
             # tf.keras.layers.Flatten(input_shape=(10, 10)),
-            # tf.keras.layers.Conv1D(2, 3, activation='relu'),
+
+            # tf.keras.layers.Conv2D(filters=64, kernel_size=(3, 3), activation='relu', data_format="channels_last"), #!!!!!!!!
+
+            # tf.keras.layers.RandomZoom(height_factor=(0.4, 0.5), width_factor=(0.4, 0.5)),
+
+            # tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), kernel_initializer=TrainModelDeep.kernel_init_edge, activation='relu', data_format="channels_last"),
+
+            # tf.keras.layers.Conv2D(filters=32, kernel_size=(3, 3), kernel_initializer=TrainModelDeep.kernel_init_sharp, activation='tanh', data_format="channels_last"),
+
+
+# !!!!!!!!!!!!!!!!
+            # tf.keras.layers.Conv2D(filters=200, kernel_size=(3, 3), activation='relu', data_format="channels_last"),
+            # tf.keras.layers.MaxPool2D(pool_size=(3, 3), strides=(2, 2), data_format="channels_last"),
+            # tf.keras.layers.Conv2D(filters=200, kernel_size=(3, 3), activation='relu', data_format="channels_last"),
+            #
+            # # tf.keras.layers.SpatialDropout2D(rate=0.2, data_format="channels_last"),
+            # tf.keras.layers.Conv2D(filters=200, kernel_size=(2, 2), activation='relu', data_format="channels_last"),
+            #
+            # tf.keras.layers.AveragePooling2D(pool_size=(2, 2), strides=(2, 2), data_format="channels_last"),
+# !!!!!!!!!!!!!!!!!!
+
+            tf.keras.layers.Conv2D(filters=20, kernel_size=(9, 9), activation='relu', data_format="channels_last"),
+            tf.keras.layers.MaxPool2D(pool_size=(3, 3), strides=(2, 2), data_format="channels_last"),
+            tf.keras.layers.Conv2D(filters=20, kernel_size=(7, 7), activation='relu', data_format="channels_last"),
+
+            # tf.keras.layers.SpatialDropout2D(rate=0.2, data_format="channels_last"),
+            tf.keras.layers.Conv2D(filters=20, kernel_size=(2, 2), activation='relu', data_format="channels_last"),
+
+            # tf.keras.layers.AveragePooling2D(pool_size=(2, 2), strides=(2, 2), data_format="channels_last"),
+
+
+
+
+
+            # tf.keras.layers.SpatialDropout2D(rate=0.05, data_format="channels_last"),
+            # tf.keras.layers.Conv2D(filters=16, kernel_size=(3, 3), activation='relu', data_format="channels_last"),
+            # tf.keras.layers.Conv2D(filters=16, kernel_size=(2, 2), activation='relu', data_format="channels_last"),
+
+            # tf.keras.layers.MaxPool2D(pool_size=(3, 3), data_format="channels_last"),
+            # tf.keras.layers.AveragePooling2D(pool_size=(3, 3), data_format="channels_last"),
+            # tf.keras.layers.Cropping2D(cropping=((2, 2), (4, 4)), data_format="channels_last"),
+
+            # tf.keras.layers.DepthwiseConv2D(kernel_size=(2, 2), activation='relu', data_format="channels_last"),
+
             # tf.keras.layers.AveragePooling1D(pool_size=7),
+
+
             tf.keras.layers.Flatten(input_shape=(28, 28)),
-            # tf.keras.layers.EinsumDense("ab,bc->ac", output_shape=256),
-            # tf.keras.layers.Attention(),
-            # tf.keras.layers.Resizing(height=10, width=10, interpolation='bilinear'),
-            tf.keras.layers.PReLU(),
-            tf.keras.layers.Dense(128, activation='relu'),
-            tf.keras.layers.AlphaDropout(0.1),
-            # tf.keras.layers.LeakyReLU(),
-            # tf.keras.layers.MultiHeadAttention(num_heads=128, key_dim=28),
+            # tf.keras.layers.PReLU(),
+            # tf.keras.layers.Dense(128, activation='relu'),
+            # tf.keras.layers.AlphaDropout(0.1),
+
             tf.keras.layers.Dense(10),
         ])
 
@@ -116,7 +186,8 @@ class TrainModelDeep(TrainModel):
 
     def calc_and_save_result_dataset(self):
         df_test = pd.read_csv(self.test_csv_path)
-        X_test = np.array(tf.reshape(df_test.iloc[:, 1:], [-1, 28, 28]))
+        # X_test = np.array(tf.reshape(df_test.iloc[:, 1:], [-1, 28, 28]))
+        X_test = np.array(tf.reshape(df_test.iloc[:, 1:], [-1, 28, 28, 1]))
 
         predictions = self.probability_model.predict(X_test)
         result = np.apply_along_axis(np.argmax, 1, predictions)
@@ -128,7 +199,7 @@ class TrainModelDeep(TrainModel):
         # img = load_img(path, color_mode="grayscale", target_size=(28, 28))
         img = img.resize((28, 28))
         x = image.img_to_array(img)
-        x = x.reshape(28, 28)
+        x = x.reshape(28, 28, 1)
         x = x / 255
         predictions = self.probability_model.predict(np.array([x]))
         code = np.argmax(predictions[0])
