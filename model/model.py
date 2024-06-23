@@ -8,11 +8,7 @@ import matplotlib.pyplot as plt
 
 import tensorflow as tf
 from sklearn.model_selection import train_test_split
-# from keras.utils import load_img
 from tensorflow.keras.preprocessing import image
-# import torch
-#
-# from kan import KAN
 
 
 CLASS_NAMES = {
@@ -83,19 +79,10 @@ class TrainModelDeep(TrainModel):
 
     def create_model(self):
         self.model = tf.keras.Sequential([
-            # tf.keras.layers.Resizing(height=10, width=10, interpolation='bilinear'),
-            # tf.keras.layers.Flatten(input_shape=(10, 10)),
-            # tf.keras.layers.Conv1D(2, 3, activation='relu'),
-            # tf.keras.layers.AveragePooling1D(pool_size=7),
             tf.keras.layers.Flatten(input_shape=(28, 28)),
-            # tf.keras.layers.EinsumDense("ab,bc->ac", output_shape=256),
-            # tf.keras.layers.Attention(),
-            # tf.keras.layers.Resizing(height=10, width=10, interpolation='bilinear'),
             tf.keras.layers.PReLU(),
             tf.keras.layers.Dense(128, activation='relu'),
             tf.keras.layers.AlphaDropout(0.1),
-            # tf.keras.layers.LeakyReLU(),
-            # tf.keras.layers.MultiHeadAttention(num_heads=128, key_dim=28),
             tf.keras.layers.Dense(10),
         ])
 
@@ -125,7 +112,6 @@ class TrainModelDeep(TrainModel):
         df_out.to_csv(self.out_csv_path, index_label="Id")
 
     def predict_from_picture(self, img) -> Tuple[int, str]:
-        # img = load_img(path, color_mode="grayscale", target_size=(28, 28))
         img = img.resize((28, 28))
         x = image.img_to_array(img)
         x = x.reshape(28, 28)
@@ -151,6 +137,3 @@ if __name__ == "__main__":
         out_csv_path=f"/data/out_{datetime.now().strftime('%Y_%m_%d')}.csv",
     )
     x.main()
-
-    # x.load_model("model.keras")
-    # x.generate_pictures()

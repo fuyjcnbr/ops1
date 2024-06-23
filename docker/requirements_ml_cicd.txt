@@ -5,11 +5,9 @@ flake8
 pytest
 dvc
 dvc-ssh
+numpy==1.26.4
 tensorflow[and-cuda]==2.14.0
 matplotlib
-numpy
 pandas
 scikit-learn
-#torch==2.1.2
-#pykan
 streamlit
